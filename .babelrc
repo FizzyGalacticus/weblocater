@@ -1,0 +1,21 @@
+{
+    "presets": ["@babel/preset-flow", "@babel/preset-react", "@babel/preset-env"],
+    "plugins": ["@babel/plugin-transform-runtime"],
+    "env": {
+        "dev": {
+            "plugins": [
+                [
+                    "react-transform",
+                    {
+                        "transforms": [
+                            {
+                                "transform": "livereactload/babel-transform",
+                                "imports": ["react"]
+                            }
+                        ]
+                    }
+                ]
+            ]
+        }
+    }
+}
