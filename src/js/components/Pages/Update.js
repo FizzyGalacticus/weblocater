@@ -5,6 +5,8 @@ import TextField from '@material-ui/core/TextField';
 import Button from '@material-ui/core/Button';
 import Snackbar from '@material-ui/core/Snackbar';
 
+import { auth as firebaseAuth } from '../../lib/firebase';
+
 class Update extends Component {
     /**
      * @constructor
@@ -14,24 +16,23 @@ class Update extends Component {
         super(props);
 
         this.state = {
-            pass: '',
+            auth: null,
             showUpdateButton: false,
             snackbarOpen: false
         };
 
-        this.handleAccessKeyChange = this.handleAccessKeyChange.bind(this);
         this.showMessage = this.showMessage.bind(this);
         this.updateLocation = this.updateLocation.bind(this);
     }
 
-    handleAccessKeyChange(e) {
-        const {
-            target: { value: pass }
-        } = e;
+    async componentDidMount() {
+        try {
+            const auth = await firebaseAuth.login();
 
-        this.setState({ pass });
-
-        // Verify access key
+            this.setState({ auth, showUpdateButton: auth !== null });
+        } catch (err) {
+            this.showMessage('Could not log in =(');
+        }
     }
 
     showMessage(message, duration = 3000) {
@@ -55,27 +56,15 @@ class Update extends Component {
     render() {
         return (
             <Grid container direction="column" justify="space-evenly" alignItems="center" style={{ height: '100%' }}>
-                {'geolocation' in navigator ? (
-                    <Fragment>
-                        <Grid item>
-                            <TextField
-                                id="access-key-input"
-                                placeholder="Access Key"
-                                margin="normal"
-                                onChange={this.handleAccessKeyChange}
-                            />
-                        </Grid>
-                        {this.state.showUpdateButton ? (
-                            <Grid item>
-                                <Button variant="contained" color="secondary" onClick={this.updateLocation}>
-                                    Update Location
-                                </Button>
-                            </Grid>
-                        ) : null}
-                    </Fragment>
+                {this.state.auth === null ? (
+                    <Grid item>
+                        <h3>You must be logged in to update.</h3>
+                    </Grid>
                 ) : (
                     <Grid item>
-                        <h3>Sorry, geolocation is not available on this device.</h3>
+                        <Button variant="contained" color="secondary" onClick={this.updateLocation}>
+                            Update Location
+                        </Button>
                     </Grid>
                 )}
                 <Snackbar

@@ -32,6 +32,7 @@
     },
     "dependencies": {
         "@material-ui/core": "^3.9.3",
+        "firebase": "^5.10.0",
         "leaflet": "^1.4.0",
         "moment": "^2.24.0",
         "react": "^16.8.6",
