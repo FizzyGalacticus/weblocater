@@ -5,20 +5,21 @@ import TextField from '@material-ui/core/TextField';
 import Button from '@material-ui/core/Button';
 import Snackbar from '@material-ui/core/Snackbar';
 
-import { auth as firebaseAuth } from '../../lib/firebase';
+import { auth as firebaseAuth, firestore } from '../../lib/firebase';
+import config from '../../config';
+
+const {
+    locationIQ: { apiKey: locationIQKey, url: locationIQURL },
+} = config;
 
 class Update extends Component {
-    /**
-     * @constructor
-     * @param {object} props - This components props.
-     */
     constructor(props) {
         super(props);
 
         this.state = {
             auth: null,
             showUpdateButton: false,
-            snackbarOpen: false
+            snackbarOpen: false,
         };
 
         this.showMessage = this.showMessage.bind(this);
@@ -44,12 +45,36 @@ class Update extends Component {
     }
 
     updateLocation() {
-        navigator.geolocation.getCurrentPosition(({ coords }) => {
+        navigator.geolocation.getCurrentPosition(async ({ coords }) => {
             const { pass } = this.state;
 
             const { latitude, longitude } = coords;
 
-            // Update location
+            const query = Object.entries({ key: locationIQKey, lat: latitude, lon: longitude, format: 'json' })
+                .reduce((acc, [key, value]) => [...acc, `${key}=${value}`], [])
+                .join('&');
+
+            try {
+                // Get reverse geo info
+                const url = `${locationIQURL}?${query}`;
+                const { address: locationData } = await fetch(url).then(res => res.json());
+
+                const docKey = `userData/${this.state.auth.user.uid}/locations`;
+                const now = Date.now();
+
+                // Save to firestore
+                await firestore.set(docKey, String(now), {
+                    latitude,
+                    longitude,
+                    date: now,
+                    locationData,
+                });
+
+                this.showMessage('Location updated!');
+            } catch (err) {
+                this.showMessage('Could not updated location =(');
+                console.error(err);
+            }
         });
     }
 
