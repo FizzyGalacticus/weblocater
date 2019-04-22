@@ -38,17 +38,6 @@ export const create = createDbIfNotInitialized(
     }
 );
 
-export const readCollection = createDbIfNotInitialized((key: string, whereClause: Array<string>) => {
-    if (whereClause !== undefined) {
-        return db
-            .collection(key)
-            .where(...whereClause)
-            .get();
-    }
-
-    return db.collection(key).get();
-});
-
 export const readDocument = createDbIfNotInitialized((key, docKey) => {
     return db
         .collection(key)
@@ -68,5 +57,20 @@ export const getDocsFromResponse = response =>
         acc[doc.id] = doc.data();
         return acc;
     }, {});
+
+export const readCollection = createDbIfNotInitialized(async (key: string, whereClause: Array<string>) => {
+    let response;
+
+    if (whereClause !== undefined) {
+        response = await db
+            .collection(key)
+            .where(...whereClause)
+            .get();
+    }
+
+    response = await db.collection(key).get();
+
+    return getDocsFromResponse(response);
+});
 
 export default { set, create, readCollection, readDocument, updateDocument, getDocsFromResponse };
