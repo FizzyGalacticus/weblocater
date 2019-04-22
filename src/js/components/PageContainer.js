@@ -14,8 +14,8 @@ const PageContainer = () => (
                 <Switch>
                     <Route component={Home} exact path="/home/:uid?" />
                     <Route component={Update} exact path="/update" />
+                    <Redirect exact from="/" to="/home/" />
                     <Route component={NotFound} />
-                    <Redirect exact from="/" to="/home" />
                 </Switch>
             </Router>
         </Grid>
