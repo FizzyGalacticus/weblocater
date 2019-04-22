@@ -1,5 +1,7 @@
 {
     "scripts": {
+        "dev": "NODE_ENV=dev gulp",
+        "build": "NODE_ENV=production gulp",
         "postinstall": "cp node_modules/metro-babel7-plugin-react-transform/src/index.js node_modules/babel-plugin-react-transform/lib/index.js"
     },
     "devDependencies": {
