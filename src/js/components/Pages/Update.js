@@ -80,7 +80,7 @@ class Update extends Component {
     }
 
     copyShareURL() {
-        const shareURL = `${window.location.host}/#/home/${this.state.auth.user.uid}`;
+        const shareURL = `${window.location.href.split(window.location.hash)[0]}#/home/${this.state.auth.user.uid}`;
 
         // Create new element
         var el = document.createElement('textarea');
