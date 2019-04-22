@@ -8,7 +8,6 @@ import FormHelperText from '@material-ui/core/FormHelperText';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
 import FormControl from '@material-ui/core/FormControl';
 import FormLabel from '@material-ui/core/FormLabel';
-import Button from '@material-ui/core/Button';
 
 import { Map, TileLayer, Marker, Popup } from 'react-leaflet';
 
@@ -94,7 +93,7 @@ class Home extends Component {
             <Grid container style={{ height: '100%' }}>
                 <Grid item xs={12} style={{ height: '7%' }}>
                     <Grid container alignItems="center">
-                        <Grid item xs={11}>
+                        <Grid item xs={12}>
                             <FormControl component="fieldset">
                                 <FormLabel component="legend">Available Map Tile Sets</FormLabel>
                                 <RadioGroup
@@ -111,9 +110,6 @@ class Home extends Component {
                                     })}
                                 </RadioGroup>
                             </FormControl>
-                        </Grid>
-                        <Grid item xs={1}>
-                            <Button>Login</Button>
                         </Grid>
                     </Grid>
                 </Grid>
