@@ -12,10 +12,10 @@ const PageContainer = () => (
         <Grid item xs={12}>
             <Router>
                 <Switch>
-                    <Route component={Home} exact path="/" />
+                    <Route component={Home} exact path="/home/:uid?" />
                     <Route component={Update} exact path="/update" />
                     <Route component={NotFound} />
-                    <Redirect exact from="/home" to="/" />
+                    <Redirect exact from="/" to="/home" />
                 </Switch>
             </Router>
         </Grid>
