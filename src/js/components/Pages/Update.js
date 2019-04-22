@@ -24,6 +24,7 @@ class Update extends Component {
 
         this.showMessage = this.showMessage.bind(this);
         this.updateLocation = this.updateLocation.bind(this);
+        this.copyShareURL = this.copyShareURL.bind(this);
     }
 
     async componentDidMount() {
@@ -78,6 +79,27 @@ class Update extends Component {
         });
     }
 
+    copyShareURL() {
+        const shareURL = `${window.location.host}/#/home/${this.state.auth.user.uid}`;
+
+        // Create new element
+        var el = document.createElement('textarea');
+        // Set value (string to be copied)
+        el.value = shareURL;
+        // Set non-editable to avoid focus and move outside of view
+        el.setAttribute('readonly', '');
+        el.style = { position: 'absolute', left: '-9999px' };
+        document.body.appendChild(el);
+        // Select text inside element
+        el.select();
+        // Copy text to clipboard
+        document.execCommand('copy');
+        // Remove temporary element
+        document.body.removeChild(el);
+
+        this.showMessage('URL Copied to Clipboard =)');
+    }
+
     render() {
         return (
             <Grid container direction="column" justify="space-evenly" alignItems="center" style={{ height: '100%' }}>
@@ -86,11 +108,19 @@ class Update extends Component {
                         <h3>You must be logged in to update.</h3>
                     </Grid>
                 ) : (
-                    <Grid item>
-                        <Button variant="contained" color="secondary" onClick={this.updateLocation}>
-                            Update Location
-                        </Button>
-                    </Grid>
+                    <Fragment>
+                        <Grid item>
+                            <Button variant="contained" color="secondary" onClick={this.updateLocation}>
+                                Update Location
+                            </Button>
+                        </Grid>
+
+                        <Grid item>
+                            <Button variant="contained" color="primary" onClick={this.copyShareURL}>
+                                Copy Share URL
+                            </Button>
+                        </Grid>
+                    </Fragment>
                 )}
                 <Snackbar
                     open={this.state.snackbarOpen}
